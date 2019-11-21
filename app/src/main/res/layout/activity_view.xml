@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_view"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ViewActivity">
+
+    <!-- Nome1 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nome1"
+        android:text="@string/vernome"
+        android:textSize="20sp"/>
+
+    <!-- Nome2 -->
+    <TextView
+        android:id="@+id/nome2"
+        android:layout_below="@+id/nome1"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Apelido1 -->
+    <TextView
+        android:id="@+id/apelido1"
+        android:layout_toRightOf="@+id/nome1"
+        android:layout_marginLeft="150dp"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/verapelido"/>
+
+    <!-- Apelido2 -->
+    <TextView
+        android:id="@+id/apelido2"
+        android:layout_below="@+id/apelido1"
+        android:layout_alignLeft="@id/apelido1"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Numero1 -->
+    <TextView
+        android:id="@+id/numero1"
+        android:layout_below="@id/nome2"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vernumero"/>
+
+    <!-- Numero2 -->
+
+    <TextView
+        android:id="@+id/numero2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/numero1"
+        android:textSize="15sp"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Idade1 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/idade1"
+        android:layout_below="@id/apelido2"
+        android:layout_alignLeft="@id/apelido2"
+        android:layout_marginLeft="80dp"
+        android:text="@string/idade"
+        android:textSize="20sp"/>
+
+    <!-- Idade2 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/idade2"
+        android:layout_below="@id/idade1"
+        android:layout_alignLeft="@id/idade1"
+        android:textSize="15sp"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Email1 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email1"
+        android:layout_below="@id/numero2"
+        android:text="@string/email"
+        android:textSize="20sp"/>
+
+    <!-- Email2 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email2"
+        android:layout_below="@id/email1"
+        android:textSize="15sp"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- Endereço1 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endereco1"
+        android:layout_below="@id/email2"
+        android:text="@string/endereco"
+        android:textSize="20sp"/>
+
+    <!-- Endereço2 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endereco2"
+        android:layout_below="@id/endereco1"
+        android:textSize="15sp"
+        android:layout_marginBottom="10dp"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/ordenar"
+        android:title="@string/ordenar"
+        app:showAsAction="always"
+        android:icon="@drawable/sort2x"
+        />
+    <item
+        android:id="@+id/pesquisa"
+        android:title="@string/pesquisa"
+        app:showAsAction="always"
+        android:icon="@drawable/find2x"
+        />
+    <item android:id="@+id/adicionar"
+        android:title="@string/adicionar"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="always"/>
+    <item android:id="@+id/sobre"
+        android:title="@string/sobre"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/logout"
+        android:title="@string/voltar"
+        android:icon="@drawable/ic_return"
+        app:showAsAction="always"/>
+
+</menu>

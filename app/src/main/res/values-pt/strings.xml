@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Contactos</string>
+    <string name="nome">Nome(*)</string>
+    <string name="vernome">Nome</string>
+    <string name="apelido">Apelido(*)</string>
+    <string name="verapelido">Apelido</string>
+    <string name="numero">Número de telemóvel(*)</string>
+    <string name="vernumero">Número de telemóvel</string>
+    <string name="idade">Idade</string>
+    <string name="email">Email</string>
+    <string name="endereco">Endereço</string>
+    <string name="confirmar1">Tem a certeza que pretende remover este contacto?</string>
+    <string name="editar">Editar</string>
+    <string name="remover">Remover</string>
+    <string name="confirmar2">Confirmar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="voltar">Voltar</string>
+    <string name="editar2">Editar Contacto</string>
+    <string name="ver">Ver Contacto</string>
+    <string name="adicionar">Adicionar contacto</string>
+    <string name="sobre">Sobre</string>
+    <string name="trabalho1">Trabalho nº2</string>
+    <string name="trabalho2">Realizado por Diogo Negrão</string>
+    <string name="trabalho3">Programação Móvel</string>
+    <string name="versao">v2.0</string>
+    <string name="aviso1">Aviso</string>
+    <string name="removido">Contacto removido</string>
+    <string name="preencher">Por favor, preencha os campos obrigatórios (*)</string>
+    <string name="editado">Contacto atualizado</string>
+    <string name="user">Utilizador</string>
+    <string name="passsword">Password</string>
+    <string name="lembrarUser">Lembrar utilizador</string>
+    <string name="registar">Registar</string>
+    <string name="checkpasssword">Confirmar Password</string>
+    <string name="confirmalogout">Tem a certeza que pretende fechar a sessão?</string>
+    <string name="emailinvalido">O email introduzido não é válido.</string>
+    <string name="userexiste">Este utilizador já existe.</string>
+    <string name="preencheloginuser">Preencha o campo "username"</string>
+    <string name="usernamelong">O username é demasiado longo</string>
+    <string name="preencheloginpass">Preencha o campo "password"</string>
+    <string name="passinvalida">A password não pode conter espaços e deve ter pelo menos um numero, uma letra minuscula e oito caracteres</string>
+    <string name="confirmapassworderro">As passwords não coincidem</string>
+    <string name="login">Login</string>
+    <string name="pesquisa">Pesquisa</string>
+    <string name="ordenar">Ordenar</string>
+    <string name="pesquisarnome">Introduza o nome a pesquisar</string>
+    <string name="avisologin">Username ou Password inválidos</string>
+    <string name="avisoregisto">Username já está em uso</string>
+    <string name="avisopassword">Password não coincide</string>
+
+
+    </resources>

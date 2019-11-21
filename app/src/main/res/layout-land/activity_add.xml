@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_add"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddActivity">
+
+    <!-- Linha 1 -->
+    <LinearLayout
+        android:id="@+id/linha1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Nome -->
+        <EditText
+            android:id="@+id/nome"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/nome"
+            android:maxLength="25"/>
+
+        <!-- Apelido -->
+        <EditText
+            android:id="@+id/apelido"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/apelido"
+            android:maxLength="25"/>
+    </LinearLayout>
+
+    <!-- Linha 2 -->
+    <LinearLayout
+        android:id="@+id/linha2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/linha1">
+
+        <!-- Numero -->
+        <EditText
+            android:id="@+id/numero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            android:hint="@string/numero"
+            android:inputType="number"
+            android:maxLength="15"/>
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:maxLength="35"/>
+    </LinearLayout>
+
+    <!-- Linha 3 -->
+    <LinearLayout
+        android:id="@+id/linha3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/linha2">
+
+        <!-- Idade -->
+        <EditText
+            android:id="@+id/idade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/idade"
+            android:inputType="number"
+            android:maxLength="3"
+            android:layout_marginRight="20dp"/>
+
+        <!-- Endereço -->
+        <EditText
+            android:id="@+id/endereco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/endereco"
+            android:maxLength="50"/>
+    </LinearLayout>
+</RelativeLayout>
