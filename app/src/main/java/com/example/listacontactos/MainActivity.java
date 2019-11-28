@@ -55,11 +55,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     SQLiteDatabase db;
     ListView listView;
-    Cursor c;
 
-    Intent login;
-
-    String prefix_url = "http://listacontactos.000webhostapp.com/listacontactos/api/";
     ArrayList<Contact> arraycon = new ArrayList<>();
 
 
@@ -163,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     // metodo para saltar para a atividade onde é possivel criar um contacto ou ler sobre a aplicacao
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Context mContext = this;
+
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.adicionar:
@@ -243,7 +239,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
 
-                String url = prefix_url + "contacto";
+                // PARA A ATIVIDADE DE ADICIONAR UM CONTACTO
+                String url = "http://listacontactos.000webhostapp.com/listacontactos/api/contacto";
+
                 Map<String, String> jsonParams = new HashMap<String, String>();
                 jsonParams.put("nome", data.getStringExtra(Utils.PARAM_NOME));
                 jsonParams.put("apelido", data.getStringExtra(Utils.PARAM_APELIDO));
@@ -291,7 +289,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
 
-                String url = prefix_url + "contacto";
+                // PARA A ATIVIDADE DE EDITAR UM CONTACTO
+                String url = "http://listacontactos.000webhostapp.com/listacontactos/api/contacto";
+
                 Map<String, String> jsonParams = new HashMap<String, String>();
                 jsonParams.put("nome", data.getStringExtra(Utils.PARAM_NOME));
                 jsonParams.put("apelido", data.getStringExtra(Utils.PARAM_APELIDO));
@@ -406,7 +406,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private void deleteFromBD(int id) {
         fillLista();
 
-        String url = prefix_url + "conatcto" + id;
+        String url = "http://listacontactos.000webhostapp.com/listacontactos/api/contacto" + id;
 
         JsonObjectRequest delete = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -479,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private void preencheListaOrdenaIdade(){
         arraycon.removeAll(arraycon);
 
-        String url = prefix_url + "contactosporidade";
+        String url = "http://listacontactos.000webhostapp.com/listacontactos/api/contactosporidade";
 
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
