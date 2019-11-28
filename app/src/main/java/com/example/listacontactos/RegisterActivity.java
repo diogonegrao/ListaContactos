@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     Intent next_activity;
     DB mDbHelper;
     SQLiteDatabase db;
-    EncriptarPass e=new EncriptarPass();
+    EncriptarPass e = new EncriptarPass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,6 @@ public class RegisterActivity extends AppCompatActivity {
                 final String password_1 = password_field.getText().toString();
                 final String password_2 = confirm_password_field.getText().toString();
 
-                //query a base de dados que verifica se o email introduzido já existe
-                //c=db.rawQuery(" select * from " + Contrato.User.TABLE_NAME + " where " + Contrato.User.COLUMN_USERNAME + " = ?" , new String [] {username});
 
                 if (password_1.length() < 6) {
                     Toast.makeText(RegisterActivity.this, R.string.passwordcurta, Toast.LENGTH_SHORT).show();
@@ -83,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                             String passwordEnc=null;
                             if (password_1.equals(password_2)) {
                                 try {
-                                    passwordEnc=e.encriptar(password_1);
+                                    passwordEnc = e.encriptar(password_1);
                                 } catch (Exception e) { }
                                 registaUser(username, password_1);
                                 startActivity(next_activity);
