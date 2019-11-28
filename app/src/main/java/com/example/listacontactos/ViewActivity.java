@@ -32,6 +32,7 @@ public class ViewActivity extends AppCompatActivity {
         TextView idade = (TextView)findViewById(R.id.idade2);
         TextView email = (TextView)findViewById(R.id.email2);
         TextView endereco = (TextView)findViewById(R.id.endereco2);
+        TextView cidade = (TextView) findViewById(R.id.cidade2);
 
         nome.setText(getIntent().getStringExtra(Utils.PARAM_NOME));
         apelido.setText(getIntent().getStringExtra(Utils.PARAM_APELIDO));
@@ -39,6 +40,8 @@ public class ViewActivity extends AppCompatActivity {
         idade.setText(String.valueOf(getIntent().getIntExtra(Utils.PARAM_IDADE, 0)));
         email.setText(getIntent().getStringExtra(Utils.PARAM_EMAIL));
         endereco.setText(getIntent().getStringExtra(Utils.PARAM_ENDERECO));
+        cidade.setText(getIntent().getStringExtra(Utils.PARAM_CIDADE));
+
 
     }
 

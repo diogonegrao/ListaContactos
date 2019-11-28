@@ -31,6 +31,7 @@ public class EditActivity extends AppCompatActivity {
         EditText edit_idade = (EditText)findViewById(R.id.idade);
         EditText edit_email = (EditText)findViewById(R.id.email);
         EditText edit_endereco = (EditText)findViewById(R.id.endereco);
+        EditText edit_cidade = (EditText)findViewById(R.id.cidade);
 
 
         edit_nome.setText(getIntent().getStringExtra(Utils.PARAM_NOME));
@@ -39,6 +40,8 @@ public class EditActivity extends AppCompatActivity {
         edit_idade.setText(String.valueOf(getIntent().getIntExtra(Utils.PARAM_IDADE, 0)));
         edit_email.setText(getIntent().getStringExtra(Utils.PARAM_EMAIL));
         edit_endereco.setText(getIntent().getStringExtra(Utils.PARAM_ENDERECO));
+        edit_cidade.setText(getIntent().getStringExtra(Utils.PARAM_CIDADE));
+
     }
 
 

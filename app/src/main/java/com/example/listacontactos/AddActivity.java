@@ -24,6 +24,7 @@ public class AddActivity extends AppCompatActivity {
     EditText idade;
     EditText email;
     EditText endereco;
+    EditText cidade;
 
 
     // CRIAR O METODO ONCREATE - metodo que apenas e utilizado ao lançar a atividade
@@ -32,12 +33,15 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        /*
         nome = (EditText) findViewById(R.id.nome);
         apelido = (EditText) findViewById(R.id.apelido);
         numero = (EditText) findViewById(R.id.numero);
         idade = (EditText) findViewById(R.id.idade);
         email = (EditText) findViewById(R.id.email);
         endereco = (EditText) findViewById(R.id.endereco);
+        */
+
     }
 
 
@@ -66,6 +70,7 @@ public class AddActivity extends AppCompatActivity {
                 EditText add_idade = (EditText)findViewById(R.id.idade);
                 EditText add_email = (EditText)findViewById(R.id.email);
                 EditText add_endereco = (EditText)findViewById(R.id.endereco);
+                EditText add_cidade = (EditText)findViewById(R.id.cidade);
 
                 String nome = add_nome.getText().toString();
                 String apelido = add_apelido.getText().toString();
@@ -73,6 +78,7 @@ public class AddActivity extends AppCompatActivity {
                 String email = add_email.getText().toString();
                 String idade = add_idade.getText().toString();
                 String endereco = add_endereco.getText().toString();
+                String cidade = add_cidade.getText().toString();
 
                 // confirmar se os campos Nome, Apelido e Numero foram preenchidos
                 if(nome.matches("") || apelido.matches("") || numero.matches("")) {
@@ -122,6 +128,7 @@ public class AddActivity extends AppCompatActivity {
                 output.putExtra(Utils.PARAM_IDADE, Integer.parseInt(add_idade.getText().toString()));
                 output.putExtra(Utils.PARAM_EMAIL, add_email.getText().toString());
                 output.putExtra(Utils.PARAM_ENDERECO, add_endereco.getText().toString());
+                output.putExtra(Utils.PARAM_CIDADE, add_cidade.getText().toString());
 
                 setResult(RESULT_OK, output);
                 finish();

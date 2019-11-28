@@ -92,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <!-- Ender2ço2 -->
+    <!-- Endereço2 -->
     <TextView
         android:id="@+id/endereco2"
         android:textSize="25sp"
@@ -118,6 +118,23 @@
         android:layout_below="@id/idade1"
         android:layout_alignParentRight="true"
         android:layout_alignLeft="@+id/idade1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Cidade1 -->
+    <TextView
+        android:id="@+id/cidade1"
+        android:text="@string/cidade"
+        android:textSize="30sp"
+        android:layout_below="@id/endereco2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Cidade2 -->
+    <TextView
+        android:id="@+id/cidade2"
+        android:textSize="25sp"
+        android:layout_below="@id/cidade1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
