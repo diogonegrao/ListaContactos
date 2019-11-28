@@ -135,37 +135,3 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 }
-
-
-
-
-
-/*
-//caso ja exista user na base de dados lança um aviso
-                if(c!=null&&c.getCount()>0)
-                {
-                    Toast.makeText(RegisterActivity.this,getResources().getString(R.string.avisoregisto),Toast.LENGTH_LONG).show();
-
-                }
-                //se as passwordes são iguais o user é adicionado a base de dados
-                else {
-
-                    if (password_1.equals(password_2)) {
-
-                        ContentValues cv = new ContentValues();
-                        cv.put(Contrato.User.COLUMN_USERNAME, username);
-                        cv.put(Contrato.User.COLUMN_PASSWORD, password_1);
-                        db.insert(Contrato.User.TABLE_NAME, null, cv);
-                        startActivity(next_activity);
-
-                    }
-
-                    //caso contrario emite aviso que as password não correspodem
-                    else {
-                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.avisopassword), Toast.LENGTH_LONG).show();
-                    }
-                }
-
- */
-
-
