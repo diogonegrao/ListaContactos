@@ -7,5 +7,6 @@ public class Utils {
     public static String PARAM_IDADE="idade";
     public static String PARAM_EMAIL="email";
     public static String PARAM_ENDERECO="endereco";
+    public static String PARAM_CIDADE="cidade_id";
     public static String PARAM_INDEX="index";
 }
