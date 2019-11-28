@@ -23,10 +23,12 @@
         android:title="@string/sobre"
         app:showAsAction="never"/>
 
+    <!--
     <item
         android:id="@+id/logout"
         android:title="@string/voltar"
         android:icon="@drawable/ic_return"
         app:showAsAction="always"/>
+        -->
 
 </menu>

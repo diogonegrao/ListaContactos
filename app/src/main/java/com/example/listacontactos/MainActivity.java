@@ -170,12 +170,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 Intent i = new Intent(MainActivity.this, AddActivity.class);
                 startActivityForResult(i, REQUEST_CODE_OP);
                 break;
-
+            /*
             case R.id.logout:
                 login=new Intent(this,LoginActivity.class);
                 startActivity(login);
                 finish();
                 break;
+
+             */
 
             case R.id.sobre:
                 Intent j = new Intent(MainActivity.this, AboutActivity.class);
