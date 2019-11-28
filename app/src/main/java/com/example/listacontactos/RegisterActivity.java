@@ -17,10 +17,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.listacontactos.db.Contrato;
 import com.example.listacontactos.db.DB;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,13 +33,13 @@ public class RegisterActivity extends AppCompatActivity {
     Intent next_activity;
     DB mDbHelper;
     SQLiteDatabase db;
-    Cursor c;
-    String email1;
+    EncriptarPass e=new EncriptarPass();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //inicilizaçoes da base de dados e declração de editText existentes no cenário
+        //inicilizaçoes da base de dados e declaração de editText existentes no cenário
         mDbHelper=new DB(this);
         db= mDbHelper.getReadableDatabase();
         setContentView(R.layout.activity_register);
@@ -69,16 +71,20 @@ public class RegisterActivity extends AppCompatActivity {
                 else {
                     String url = "http://listacontactos.000webhostapp.com/listacontactos/api/user/diogo" + username;
 
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse(JSONArray response) {
                             Toast.makeText(RegisterActivity.this, R.string.userexiste, Toast.LENGTH_SHORT).show();
                         }
 
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            String passwordEnc=null;
                             if (password_1.equals(password_2)) {
+                                try {
+                                    passwordEnc=e.encriptar(password_1);
+                                } catch (Exception e) { }
                                 registaUser(username, password_1);
                                 startActivity(next_activity);
                             }
@@ -88,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-                    MySingleton.getInstance(RegisterActivity.this).addToRequestQueue(jsonObjectRequest);
+                    MySingleton.getInstance(RegisterActivity.this).addToRequestQueue(jsonArrayRequest);
 
                 }
             }
@@ -97,8 +103,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void registaUser(String username,String password) {
                 String url = "http://listacontactos.000webhostapp.com/listacontactos/api/user";
                 Map<String, String> jsonParams = new HashMap<String, String>();
-                jsonParams.put("email",username);
-                jsonParams.put("passwd",password);
+                jsonParams.put("username",username);
+                jsonParams.put("password",password);
+
 
                 JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(jsonParams), new Response.Listener<JSONObject>() {
                     @Override
