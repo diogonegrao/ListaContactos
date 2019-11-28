@@ -52,18 +52,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private  int REQUEST_CODE_OP = 1;
     private  int REQUEST_CODE_OP_2 = 2;
 
-    DB mDbHelper;
+
     SQLiteDatabase db;
     ListView listView;
     Cursor c;
-    MyCursorAdapter madapter;
-    int iduser;
-    EditText pesquisanome;
-    SharedPreferences sharedPreferences;
-    String user_name;
+
     Intent login;
-    int id_user;
-    Integer idcontacto;
 
     String prefix_url = "http://listacontactos.000webhostapp.com/listacontactos/api/";
     ArrayList<Contact> arraycon = new ArrayList<>();
@@ -76,20 +70,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);     // 1ª atividade lançada pela aplicacao
         registerForContextMenu(findViewById(R.id.lista));
 
-        iduser = getIntent().getIntExtra("ID", -1);
-
-        //mDbHelper = new DB(this);       // permite a ligacao a BD criada
-        //db = mDbHelper.getReadableDatabase();   // permite que a BD seja aberta para leitura
 
         listView = (ListView)findViewById(R.id.lista);  // representa a lista declarada no layout
 
 
-        //fillLista();      // metodo para preencher a lista
+        fillLista();      // metodo para preencher a lista
 
-
-        //sharedPreferences = getSharedPreferences("USER_CREDENTIALS",MODE_PRIVATE);
-        //user_name = sharedPreferences.getString("NAME","DEFAULT_NAME");
-        //id_user = sharedPreferences.getInt("IDUSER",-1);
 
         // com um click abre a atividade onde e possivel ver todos os detalhes do contacto
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
 
                 Intent intent = new Intent(MainActivity.this, ViewActivity.class);
-                //c.moveToPosition(i);    // move o cursor para o index da linha selecionada de maneira a ter informacao pretendida
+
                 intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).nome);
                 intent.putExtra(Utils.PARAM_APELIDO, arraycon.get(i).apelido);
                 intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).numero);
@@ -106,8 +92,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).email);
                 intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).endereco);
                 intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).cidade);
-
-                // utiliza o valor que esta no cursor para atribuir as variaveis do UTILS os dados correspondentes
+                // utiliza o valor que esta no array para atribuir as variaveis do UTILS os dados correspondentes
 
 
                 startActivity(intent);
@@ -137,13 +122,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     private void fillLista(){
         arraycon.removeAll(arraycon);
-        //getCursor();
-        //madapter = new MyCursorAdapter(MainActivity.this, c);   // a info que esta contida no cursor c (alimentado pela BD) vai ser utilizada para construir o cursor personalizado
-        //listView.setAdapter(madapter);
 
-        //String s = String.valueOf(iduser);
-
-        String url = prefix_url + "contactos";
+        String url = "http://listacontactos.000webhostapp.com/listacontactos/api/contactos";
 
         JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -193,8 +173,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
             case R.id.logout:
                 login=new Intent(this,LoginActivity.class);
-                final SharedPreferences sharedPreferences=getSharedPreferences("USER_CREDENTIALS",MODE_PRIVATE);
-                sharedPreferences.edit().putBoolean("ISLOGGEDIN",false).commit();
                 startActivity(login);
                 finish();
                 break;
@@ -262,18 +240,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         if (requestCode == REQUEST_CODE_OP) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                /*
-                //arrayCon.add(new Contact(data.getStringExtra(Utils.PARAM_NOME), data.getStringExtra(Utils.PARAM_APELIDO), data.getIntExtra(Utils.PARAM_NUMERO, 0), data.getIntExtra(Utils.PARAM_IDADE,0), data.getStringExtra(Utils.PARAM_EMAIL), data.getStringExtra(Utils.PARAM_ENDERECO)));
-                ContentValues cv = new ContentValues();
-                cv.put(Contrato.Contacto.COLUMN_NOME, data.getStringExtra(Utils.PARAM_NOME));
-                cv.put(Contrato.Contacto.COLUMN_APELIDO, data.getStringExtra(Utils.PARAM_APELIDO));
-                cv.put(Contrato.Contacto.COLUMN_NUMERO, data.getIntExtra(Utils.PARAM_NUMERO, -1));
-                cv.put(Contrato.Contacto.COLUMN_EMAIL, data.getStringExtra(Utils.PARAM_EMAIL));
-                cv.put(Contrato.Contacto.COLUMN_ENDERECO, data.getStringExtra(Utils.PARAM_ENDERECO));
-                cv.put(Contrato.Contacto.COLUMN_IDADE, data.getIntExtra(Utils.PARAM_IDADE, -1));
-                cv.put(Contrato.Contacto.COLUMN_ID_USER, iduser);
-                db.insert(Contrato.Contacto.TABLE_NAME, null, cv);
-                 */
 
                 String url = prefix_url + "contacto";
                 Map<String, String> jsonParams = new HashMap<String, String>();
@@ -322,22 +288,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         if (requestCode == REQUEST_CODE_OP_2) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                //int i = data.getIntExtra(Utils.PARAM_INDEX, 0);
-                //arrayCon.set(i,new Contact(data.getStringExtra(Utils.PARAM_NOME), data.getStringExtra(Utils.PARAM_APELIDO), data.getIntExtra(Utils.PARAM_NUMERO, 0), data.getIntExtra(Utils.PARAM_IDADE,0), data.getStringExtra(Utils.PARAM_EMAIL), data.getStringExtra(Utils.PARAM_ENDERECO)));
-
-                /*
-                ContentValues cv = new ContentValues();
-                cv.put(Contrato.Contacto.COLUMN_NOME, data.getStringExtra(Utils.PARAM_NOME));
-                cv.put(Contrato.Contacto.COLUMN_APELIDO, data.getStringExtra(Utils.PARAM_APELIDO));
-                cv.put(Contrato.Contacto.COLUMN_NUMERO, data.getIntExtra(Utils.PARAM_NUMERO, -1));
-                cv.put(Contrato.Contacto.COLUMN_EMAIL, data.getStringExtra(Utils.PARAM_EMAIL));
-                cv.put(Contrato.Contacto.COLUMN_ENDERECO, data.getStringExtra(Utils.PARAM_ENDERECO));
-                cv.put(Contrato.Contacto.COLUMN_IDADE, data.getIntExtra(Utils.PARAM_IDADE, -1));
-                cv.put(Contrato.Contacto.COLUMN_ID_USER, iduser);
-                int id = data.getIntExtra(Utils.PARAM_INDEX, -1);
-                db.update(Contrato.Contacto.TABLE_NAME, cv, Contrato.Contacto._ID + " = ?", new String[]{id+""});
-
-                 */
 
                 String url = prefix_url + "contacto";
                 Map<String, String> jsonParams = new HashMap<String, String>();
@@ -391,9 +341,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         super.onCreateContextMenu(menu,view,menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.contextual, menu);
-
     }
-
 
 
     // metodo que atua em conformidade com a opcao escolha apos o long click
@@ -403,13 +351,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         //final int index = info.position;
         Context mContext = this;
         int itemPosition = info.position;   // posicao que foi clicada na lista
-        c.moveToPosition(itemPosition);     // permite ir ao cursor correspondente da linha selecionada e recolher toda a informacao que contem
 
         switch (item.getItemId()) {
             case R.id.editar:
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
 
                 int id_contacto = arraycon.get(itemPosition).id;
+                intent.putExtra(Utils.PARAM_NOME, id_contacto);
                 intent.putExtra(Utils.PARAM_NOME, arraycon.get(itemPosition).nome);
                 intent.putExtra(Utils.PARAM_APELIDO, arraycon.get(itemPosition).apelido);
                 intent.putExtra(Utils.PARAM_NUMERO, arraycon.get(itemPosition).numero);
@@ -417,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 intent.putExtra(Utils.PARAM_EMAIL, arraycon.get(itemPosition).email);
                 intent.putExtra(Utils.PARAM_ENDERECO, arraycon.get(itemPosition).endereco);
                 intent.putExtra(Utils.PARAM_CIDADE, arraycon.get(itemPosition).cidade);
-                // utiliza o valor que esta no cursor para atribuir as variaveis do UTILS os dados correspondentes (para estes estarem visiveis na edicao)
+                // utiliza o valor que esta no array para atribuir as variaveis do UTILS os dados correspondentes (para estes estarem visiveis na edicao)
 
                 startActivityForResult(intent, REQUEST_CODE_OP_2);
 
@@ -431,8 +379,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //int id_contacto = c.getInt(c.getColumnIndex(Contrato.Contacto._ID));    // recolher o ID do contacto (que estava no cursor)
-                                //deleteFromBD(id_contacto);  // remover
 
                                 int itemPosition = info.position;
                                 int remove_id = arraycon.get(itemPosition).id;
@@ -456,7 +402,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     private void deleteFromBD(int id) {
-        //db.delete(Contrato.Contacto.TABLE_NAME, Contrato.Contacto._ID + " = ?", new String[]{id+""});
         fillLista();
 
         String url = prefix_url + "conatcto" + id;
@@ -531,11 +476,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     private void preencheListaOrdenaIdade(){
         arraycon.removeAll(arraycon);
-        //getCursor();
-        //madapter = new MyCursorAdapter(MainActivity.this, c);   // a info que esta contida no cursor c (alimentado pela BD) vai ser utilizada para construir o cursor personalizado
-        //listView.setAdapter(madapter);
-
-        //String s = String.valueOf(iduser);
 
         String url = prefix_url + "contactosporidade";
 
@@ -566,14 +506,5 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-
-        if(!c.isClosed()) {     // se o cursor estiver aberto
-            c.close();          // fecha o cursor
-            c = null;           // e poem-no a nulo
-        }
-        if(db.isOpen()){        // se a BD estiver aberta
-            db.close();         // fecha a BD
-            db = null;          // e poem-na a nulo
-        }
     }
 }
