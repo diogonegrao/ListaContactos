@@ -13,20 +13,33 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.listacontactos.db.Contrato;
 import com.example.listacontactos.db.DB;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     Intent next_activity;
     DB mDbHelper;
     SQLiteDatabase db;
-    Cursor c;
-    String email1;
+    EncriptarPass e = new EncriptarPass();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //inicilizaçoes da base de dados e declração de editText existentes no cenário
+        //inicilizaçoes da base de dados e declaração de editText existentes no cenário
         mDbHelper=new DB(this);
         db= mDbHelper.getReadableDatabase();
         setContentView(R.layout.activity_register);
@@ -45,42 +58,86 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //extração dos carateres digitados para variaveis do tipo string
-                String username = username_field.getText().toString();
-                String password_1 = password_field.getText().toString();
-                String password_2 = confirm_password_field.getText().toString();
+                final String username = username_field.getText().toString();
+                final String password_1 = password_field.getText().toString();
+                final String password_2 = confirm_password_field.getText().toString();
 
-                //query a base de dados que verifica se o email introduzido já existe
-                c=db.rawQuery(" select * from " + Contrato.User.TABLE_NAME + " where " + Contrato.User.COLUMN_USERNAME + " = ?" , new String [] {username});
 
-                //caso ja exista user na base de dados lança um aviso
-                if(c!=null&&c.getCount()>0)
-                {
-                    Toast.makeText(RegisterActivity.this,getResources().getString(R.string.avisoregisto),Toast.LENGTH_LONG).show();
-
+                if (password_1.length() < 6) {
+                    Toast.makeText(RegisterActivity.this, R.string.passwordcurta, Toast.LENGTH_SHORT).show();
                 }
-                //se as passwordes são iguais o user é adicionado a base de dados
                 else {
+                    String url = "http://listacontactos.000webhostapp.com/listacontactos/api/user" + username;
 
-                    if (password_1.equals(password_2)) {
+                    JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                        ContentValues cv = new ContentValues();
-                        cv.put(Contrato.User.COLUMN_USERNAME, username);
-                        cv.put(Contrato.User.COLUMN_PASSWORD, password_1);
-                        db.insert(Contrato.User.TABLE_NAME, null, cv);
-                        startActivity(next_activity);
+                            Toast.makeText(RegisterActivity.this, R.string.userexiste, Toast.LENGTH_SHORT).show();
+                        }
 
-                    }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            String passwordEnc=null;
+                            if (password_1.equals(password_2)) {
+                                try {
+                                    passwordEnc = e.encriptar(password_1);
+                                } catch (Exception e) { }
+                                registaUser(username, password_1);
+                                startActivity(next_activity);
+                            }
+                            else{
+                                Toast.makeText(RegisterActivity.this, R.string.avisopassword, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
 
-                    //caso contrario emite aviso que as password não correspodem
-                    else {
-                        Toast.makeText(RegisterActivity.this, getResources().getString(R.string.avisopassword), Toast.LENGTH_LONG).show();
-                    }
+                    MySingleton.getInstance(RegisterActivity.this).addToRequestQueue(jsonArrayRequest);
+
                 }
+            }
 
+
+            public void registaUser(String username,String password) {
+                String url = "http://listacontactos.000webhostapp.com/listacontactos/api/user";
+                Map<String, String> jsonParams = new HashMap<String, String>();
+                jsonParams.put("username",username);
+                jsonParams.put("password",password);
+
+
+                JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(jsonParams), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getBoolean("status")) {
+                                Toast.makeText(RegisterActivity.this, response.getString("MSG"), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, response.getString("MSG"), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException ex) {
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("User-agent", System.getProperty("http.agent"));
+                        return headers;
+                    }
+                };
+
+                MySingleton.getInstance(RegisterActivity.this).addToRequestQueue(postRequest);
+
+                finish();
             }
         });
-
     }
 }
-
-
