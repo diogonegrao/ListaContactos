@@ -67,11 +67,12 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, R.string.passwordcurta, Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    String url = "http://listacontactos.000webhostapp.com/listacontactos/api/user/diogo" + username;
+                    String url = "http://listacontactos.000webhostapp.com/listacontactos/api/user" + username;
 
                     JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
+
                             Toast.makeText(RegisterActivity.this, R.string.userexiste, Toast.LENGTH_SHORT).show();
                         }
 
