@@ -81,9 +81,6 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
                             String passwordEnc=null;
                             if (password_1.equals(password_2)) {
-                                try {
-                                    passwordEnc = e.encriptar(password_1);
-                                } catch (Exception e) { }
                                 registaUser(username, password_1);
                                 startActivity(next_activity);
                             }

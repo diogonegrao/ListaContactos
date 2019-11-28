@@ -7,12 +7,14 @@
         app:showAsAction="always"
         android:icon="@drawable/sort2x"
         />
+    <!--
     <item
         android:id="@+id/pesquisa"
         android:title="@string/pesquisa"
         app:showAsAction="always"
         android:icon="@drawable/find2x"
         />
+        -->
     <item android:id="@+id/adicionar"
         android:title="@string/adicionar"
         android:icon="@drawable/ic_add"

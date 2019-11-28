@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,14 +20,31 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.listacontactos.adapter.CustomArrayAdapter;
 import com.example.listacontactos.adapter.MyCursorAdapter;
 import com.example.listacontactos.db.Contrato;
 import com.example.listacontactos.db.DB;
+import com.example.listacontactos.entities.Contact;
 
 import com.example.listacontactos.Utils.Utils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements Serializable {
@@ -45,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     String user_name;
     Intent login;
     int id_user;
+    Integer idcontacto;
+
+    String prefix_url = "http://listacontactos.000webhostapp.com/listacontactos/api/";
+    ArrayList<Contact> arraycon = new ArrayList<>();
 
 
     // CRIAR O METODO ONCREATE - metodo que apenas e utilizado ao lançar a atividade
@@ -52,42 +74,48 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);     // 1ª atividade lançada pela aplicacao
+        registerForContextMenu(findViewById(R.id.lista));
 
         iduser = getIntent().getIntExtra("ID", -1);
 
-        mDbHelper = new DB(this);       // permite a ligacao a BD criada
-        db = mDbHelper.getReadableDatabase();   // permite que a BD seja aberta para leitura
+        //mDbHelper = new DB(this);       // permite a ligacao a BD criada
+        //db = mDbHelper.getReadableDatabase();   // permite que a BD seja aberta para leitura
 
         listView = (ListView)findViewById(R.id.lista);  // representa a lista declarada no layout
 
-        registerForContextMenu(findViewById(R.id.lista));
-        fillLista();      // metodo para preencher a lista
+
+        //fillLista();      // metodo para preencher a lista
 
 
-        sharedPreferences = getSharedPreferences("USER_CREDENTIALS",MODE_PRIVATE);
-        user_name = sharedPreferences.getString("NAME","DEFAULT_NAME");
-        id_user = sharedPreferences.getInt("IDUSER",-1);
+        //sharedPreferences = getSharedPreferences("USER_CREDENTIALS",MODE_PRIVATE);
+        //user_name = sharedPreferences.getString("NAME","DEFAULT_NAME");
+        //id_user = sharedPreferences.getInt("IDUSER",-1);
 
         // com um click abre a atividade onde e possivel ver todos os detalhes do contacto
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+
                 Intent intent = new Intent(MainActivity.this, ViewActivity.class);
-                c.moveToPosition(i);    // move o cursor para o index da linha selecionada de maneira a ter informacao pretendida
-                intent.putExtra(Utils.PARAM_NOME, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_NOME)));
-                intent.putExtra(Utils.PARAM_APELIDO, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_APELIDO)));
-                intent.putExtra(Utils.PARAM_NUMERO, c.getInt(c.getColumnIndex(Contrato.Contacto.COLUMN_NUMERO)));
-                intent.putExtra(Utils.PARAM_EMAIL, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_EMAIL)));
-                intent.putExtra(Utils.PARAM_ENDERECO, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_ENDERECO)));
-                intent.putExtra(Utils.PARAM_IDADE, c.getInt(c.getColumnIndex(Contrato.Contacto.COLUMN_IDADE)));
+                //c.moveToPosition(i);    // move o cursor para o index da linha selecionada de maneira a ter informacao pretendida
+                intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).nome);
+                intent.putExtra(Utils.PARAM_APELIDO, arraycon.get(i).apelido);
+                intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).numero);
+                intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).idade);
+                intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).email);
+                intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).endereco);
+                intent.putExtra(Utils.PARAM_NOME, arraycon.get(i).cidade);
+
                 // utiliza o valor que esta no cursor para atribuir as variaveis do UTILS os dados correspondentes
+
 
                 startActivity(intent);
             }
         });
     }
 
+    /*
     private void getCursor() {
 
         // construir a query para o cursor
@@ -104,12 +132,41 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         c = db.rawQuery(sql, null);     // toda a info recolhida a partir da query, e posta no cursor c
 
     }
+     */
 
 
     private void fillLista(){
-        getCursor();
-        madapter = new MyCursorAdapter(MainActivity.this, c);   // a info que esta contida no cursor c (alimentado pela BD) vai ser utilizada para construir o cursor personalizado
-        listView.setAdapter(madapter);
+        arraycon.removeAll(arraycon);
+        //getCursor();
+        //madapter = new MyCursorAdapter(MainActivity.this, c);   // a info que esta contida no cursor c (alimentado pela BD) vai ser utilizada para construir o cursor personalizado
+        //listView.setAdapter(madapter);
+
+        //String s = String.valueOf(iduser);
+
+        String url = prefix_url + "contactos";
+
+        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject obj = response.getJSONObject(i);
+                        arraycon.add(new Contact(obj.getInt("id"),obj.getString("nome"), obj.getString("apelido"), obj.getInt("numero"), obj.getInt("idade"), obj.getString("email"), obj.getString("endereco"), obj.getString("cidade")));
+
+                        CustomArrayAdapter itemsAdapter = new CustomArrayAdapter(MainActivity.this, arraycon);
+                        ((ListView) findViewById(R.id.lista)).setAdapter(itemsAdapter);
+                    }
+                } catch (JSONException e) {
+                    Log.d("fillLista", "" + e);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+        MySingleton.getInstance(this).addToRequestQueue(jsonArrRequest);
     }
 
 
@@ -148,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 break;
 
                 // pesquisa por nome
+            /*
             case R.id.pesquisa:
                 pesquisanome = new EditText(this);
 
@@ -173,6 +231,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 AlertDialog dialog2 = builder2.create();
                 dialog2.show();
                 break;
+
+             */
 
             // ordenar por idade
             case R.id.ordenar:
@@ -202,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         if (requestCode == REQUEST_CODE_OP) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
+                /*
                 //arrayCon.add(new Contact(data.getStringExtra(Utils.PARAM_NOME), data.getStringExtra(Utils.PARAM_APELIDO), data.getIntExtra(Utils.PARAM_NUMERO, 0), data.getIntExtra(Utils.PARAM_IDADE,0), data.getStringExtra(Utils.PARAM_EMAIL), data.getStringExtra(Utils.PARAM_ENDERECO)));
                 ContentValues cv = new ContentValues();
                 cv.put(Contrato.Contacto.COLUMN_NOME, data.getStringExtra(Utils.PARAM_NOME));
@@ -212,7 +273,49 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 cv.put(Contrato.Contacto.COLUMN_IDADE, data.getIntExtra(Utils.PARAM_IDADE, -1));
                 cv.put(Contrato.Contacto.COLUMN_ID_USER, iduser);
                 db.insert(Contrato.Contacto.TABLE_NAME, null, cv);
+                 */
+
+                String url = prefix_url + "contacto";
+                Map<String, String> jsonParams = new HashMap<String, String>();
+                jsonParams.put("nome", data.getStringExtra(Utils.PARAM_NOME));
+                jsonParams.put("apelido", data.getStringExtra(Utils.PARAM_APELIDO));
+                jsonParams.put("numero", String.valueOf(data.getIntExtra(Utils.PARAM_NUMERO, -1)));
+                jsonParams.put("idade", String.valueOf(data.getIntExtra(Utils.PARAM_IDADE, -1)));
+                jsonParams.put("email", data.getStringExtra(Utils.PARAM_EMAIL));
+                jsonParams.put("endereco", data.getStringExtra(Utils.PARAM_ENDERECO));
+                jsonParams.put("user_id", "1");
+                jsonParams.put("cidade_id", data.getStringExtra(Utils.PARAM_CIDADE));
+
                 fillLista();
+
+                JsonObjectRequest post = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(jsonParams), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getBoolean("status")) {
+                                Toast.makeText(MainActivity.this, response.getString("MSG"), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, response.getString("MSG"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("User-agent", System.getProperty("http.agent"));
+                        return headers;
+                    }
+                };
+
+                MySingleton.getInstance(this).addToRequestQueue(post);
             }
         }
 
@@ -222,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 //int i = data.getIntExtra(Utils.PARAM_INDEX, 0);
                 //arrayCon.set(i,new Contact(data.getStringExtra(Utils.PARAM_NOME), data.getStringExtra(Utils.PARAM_APELIDO), data.getIntExtra(Utils.PARAM_NUMERO, 0), data.getIntExtra(Utils.PARAM_IDADE,0), data.getStringExtra(Utils.PARAM_EMAIL), data.getStringExtra(Utils.PARAM_ENDERECO)));
 
+                /*
                 ContentValues cv = new ContentValues();
                 cv.put(Contrato.Contacto.COLUMN_NOME, data.getStringExtra(Utils.PARAM_NOME));
                 cv.put(Contrato.Contacto.COLUMN_APELIDO, data.getStringExtra(Utils.PARAM_APELIDO));
@@ -232,7 +336,50 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 cv.put(Contrato.Contacto.COLUMN_ID_USER, iduser);
                 int id = data.getIntExtra(Utils.PARAM_INDEX, -1);
                 db.update(Contrato.Contacto.TABLE_NAME, cv, Contrato.Contacto._ID + " = ?", new String[]{id+""});
+
+                 */
+
+                String url = prefix_url + "contacto";
+                Map<String, String> jsonParams = new HashMap<String, String>();
+                jsonParams.put("nome", data.getStringExtra(Utils.PARAM_NOME));
+                jsonParams.put("apelido", data.getStringExtra(Utils.PARAM_APELIDO));
+                jsonParams.put("numero", String.valueOf(data.getIntExtra(Utils.PARAM_NUMERO, -1)));
+                jsonParams.put("idade", String.valueOf(data.getIntExtra(Utils.PARAM_IDADE, -1)));
+                jsonParams.put("email", data.getStringExtra(Utils.PARAM_EMAIL));
+                jsonParams.put("endereco", data.getStringExtra(Utils.PARAM_ENDERECO));
+                jsonParams.put("user_id", "1");
+                jsonParams.put("cidade_id", data.getStringExtra(Utils.PARAM_CIDADE));
+
                 fillLista();
+
+                JsonObjectRequest post = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(jsonParams), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.getBoolean("status")) {
+                                Toast.makeText(MainActivity.this, response.getString("MSG"), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, response.getString("MSG"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("User-agent", System.getProperty("http.agent"));
+                        return headers;
+                    }
+                };
+
+                MySingleton.getInstance(this).addToRequestQueue(post);
             }
         }
     }
@@ -262,14 +409,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             case R.id.editar:
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
 
-                int id_contacto = c.getInt(c.getColumnIndex(Contrato.Contacto._ID));
-                intent.putExtra(Utils.PARAM_NOME, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_NOME)));
-                intent.putExtra(Utils.PARAM_APELIDO, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_APELIDO)));
-                intent.putExtra(Utils.PARAM_NUMERO, c.getInt(c.getColumnIndex(Contrato.Contacto.COLUMN_NUMERO)));
-                intent.putExtra(Utils.PARAM_EMAIL, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_EMAIL)));
-                intent.putExtra(Utils.PARAM_ENDERECO, c.getString(c.getColumnIndex(Contrato.Contacto.COLUMN_ENDERECO)));
-                intent.putExtra(Utils.PARAM_IDADE, c.getInt(c.getColumnIndex(Contrato.Contacto.COLUMN_IDADE)));
-                intent.putExtra(Utils.PARAM_INDEX, id_contacto);
+                int id_contacto = arraycon.get(itemPosition).id;
+                intent.putExtra(Utils.PARAM_NOME, arraycon.get(itemPosition).nome);
+                intent.putExtra(Utils.PARAM_APELIDO, arraycon.get(itemPosition).apelido);
+                intent.putExtra(Utils.PARAM_NUMERO, arraycon.get(itemPosition).numero);
+                intent.putExtra(Utils.PARAM_IDADE, arraycon.get(itemPosition).idade);
+                intent.putExtra(Utils.PARAM_EMAIL, arraycon.get(itemPosition).email);
+                intent.putExtra(Utils.PARAM_ENDERECO, arraycon.get(itemPosition).endereco);
+                intent.putExtra(Utils.PARAM_CIDADE, arraycon.get(itemPosition).cidade);
                 // utiliza o valor que esta no cursor para atribuir as variaveis do UTILS os dados correspondentes (para estes estarem visiveis na edicao)
 
                 startActivityForResult(intent, REQUEST_CODE_OP_2);
@@ -284,8 +431,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                int id_contacto = c.getInt(c.getColumnIndex(Contrato.Contacto._ID));    // recolher o ID do contacto (que estava no cursor)
-                                deleteFromBD(id_contacto);  // remover
+                                //int id_contacto = c.getInt(c.getColumnIndex(Contrato.Contacto._ID));    // recolher o ID do contacto (que estava no cursor)
+                                //deleteFromBD(id_contacto);  // remover
+
+                                int itemPosition = info.position;
+                                int remove_id = arraycon.get(itemPosition).id;
+                                deleteFromBD(remove_id);
+                                fillLista();
                             }
                         });
                 builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -304,13 +456,35 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     private void deleteFromBD(int id) {
-        db.delete(Contrato.Contacto.TABLE_NAME, Contrato.Contacto._ID + " = ?", new String[]{id+""});
+        //db.delete(Contrato.Contacto.TABLE_NAME, Contrato.Contacto._ID + " = ?", new String[]{id+""});
         fillLista();
+
+        String url = prefix_url + "conatcto" + id;
+
+        JsonObjectRequest delete = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    boolean status = response.getBoolean("status");
+                    if (status == true) {
+                        Toast.makeText(MainActivity.this, R.string.removido, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Log.d("login", "" + e);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        MySingleton.getInstance(this).addToRequestQueue(delete);
     }
 
 
 
-
+/*
     private void getCursorOrdenaIdade() {
         String sql = "select " + Contrato.Contacto.TABLE_NAME + "." +
                 Contrato.Contacto._ID + "," +
@@ -326,7 +500,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         c = db.rawQuery(sql, null);     // toda a info recolhida a partir da query, e posta no cursor c
     }
 
+ */
 
+/*
     private void getCursorPesquisaNome(String nomep) {
         String sql = "select " + Contrato.Contacto.TABLE_NAME + "." +
                 Contrato.Contacto._ID + "," +
@@ -342,18 +518,49 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         c = db.rawQuery(sql, null);     // toda a info recolhida a partir da query, e posta no cursor c
     }
 
+ */
+/*
     private void preencheListaPesquisaNome(String nomep){
 
         getCursorPesquisaNome(nomep);
         madapter = new MyCursorAdapter(MainActivity.this, c);   // a info que esta contida no cursor c (alimentado pela BD) vai ser utilizada para construir o cursor personalizado
         listView.setAdapter(madapter);
     }
+*/
+
 
     private void preencheListaOrdenaIdade(){
+        arraycon.removeAll(arraycon);
+        //getCursor();
+        //madapter = new MyCursorAdapter(MainActivity.this, c);   // a info que esta contida no cursor c (alimentado pela BD) vai ser utilizada para construir o cursor personalizado
+        //listView.setAdapter(madapter);
 
-        getCursorOrdenaIdade();
-        madapter = new MyCursorAdapter(MainActivity.this, c);   // a info que esta contida no cursor c (alimentado pela BD) vai ser utilizada para construir o cursor personalizado
-        listView.setAdapter(madapter);
+        //String s = String.valueOf(iduser);
+
+        String url = prefix_url + "contactosporidade";
+
+        JsonArrayRequest jsonArrRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject obj = response.getJSONObject(i);
+                        arraycon.add(new Contact(obj.getInt("id"), obj.getString("nome"), obj.getString("apelido"), obj.getInt("numero"), obj.getInt("idade"), obj.getString("email"), obj.getString("endereco"), obj.getString("cidade")));
+
+                        CustomArrayAdapter itemsAdapter = new CustomArrayAdapter(MainActivity.this, arraycon);
+                        ((ListView) findViewById(R.id.lista)).setAdapter(itemsAdapter);
+                    }
+                } catch (JSONException e) {
+                    Log.d("fillLista", "" + e);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+        MySingleton.getInstance(this).addToRequestQueue(jsonArrRequest);
     }
 
     @Override
