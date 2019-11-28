@@ -47,6 +47,7 @@
     <string name="avisologin">Username ou Password inválidos</string>
     <string name="avisoregisto">Username já está em uso</string>
     <string name="avisopassword">Password não coincide</string>
+    <string name="passwordcurta">Password é curta demais </string>
 
 
     </resources>

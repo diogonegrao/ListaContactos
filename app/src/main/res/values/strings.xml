@@ -47,6 +47,8 @@
     <string name="avisologin">Username or Password not valid</string>
     <string name="avisoregisto">Username is already in use</string>
     <string name="avisopassword">Password does not match</string>
+    <string name="passwordcurta">Password does not have minimum </string>
+
 
 
 
