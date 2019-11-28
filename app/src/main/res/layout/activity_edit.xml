@@ -61,7 +61,7 @@
             android:hint="@string/idade"/>
     </LinearLayout>
 
-    <!-- Linha 3 e 4 -->
+    <!-- Linha 3, 4 e 5 -->
     <LinearLayout
         android:id="@+id/linha3e4"
         android:layout_width="match_parent"
@@ -82,5 +82,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/endereco"/>
+
+        <!-- Cidade -->
+        <EditText
+            android:id="@+id/cidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/cidade"/>
     </LinearLayout>
 </RelativeLayout>

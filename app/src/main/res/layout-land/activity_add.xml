@@ -90,4 +90,20 @@
             android:hint="@string/endereco"
             android:maxLength="50"/>
     </LinearLayout>
+
+    <!-- Linha 4 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linha4"
+        android:orientation="vertical"
+        android:layout_below="@+id/linha3">
+
+        <EditText
+            android:id="@+id/cidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/cidade"
+            android:maxLength="50"/>
+    </LinearLayout>
 </RelativeLayout>

@@ -124,5 +124,23 @@
         android:textSize="15sp"
         android:layout_marginBottom="10dp"/>
 
+    <!-- Cidade1 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cidade1"
+        android:layout_below="@id/endereco2"
+        android:text="@string/cidade"
+        android:textSize="20sp"/>
+
+    <!-- Cidade2 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cidade2"
+        android:layout_below="@id/cidade1"
+        android:textSize="15sp"
+        android:layout_marginBottom="10dp"/>
+
 
 </RelativeLayout>
