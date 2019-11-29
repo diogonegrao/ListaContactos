@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 int id = data.getIntExtra(Utils.PARAM_INDEX, -1);
 
                 // PARA A ATIVIDADE DE EDITAR UM CONTACTO
-                String url = "http://listacontactos.000webhostapp.com/listacontactos/api/editarcontacto" + id;
+                String url = "http://listacontactos.000webhostapp.com/listacontactos/api/contacto" + id;
 
                 Map<String, String> jsonParams = new HashMap<String, String>();
                 jsonParams.put("nome", data.getStringExtra(Utils.PARAM_NOME));
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                 fillLista();
 
-                JsonObjectRequest post = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(jsonParams), new Response.Listener<JSONObject>() {
+                JsonObjectRequest post = new JsonObjectRequest(Request.Method.PUT, url, new JSONObject(jsonParams), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
