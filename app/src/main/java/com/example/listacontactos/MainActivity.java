@@ -289,8 +289,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
 
+                int id = data.getIntExtra(Utils.PARAM_INDEX, -1);
+
                 // PARA A ATIVIDADE DE EDITAR UM CONTACTO
-                String url = "http://listacontactos.000webhostapp.com/listacontactos/api/contacto";
+                String url = "http://listacontactos.000webhostapp.com/listacontactos/api/editarcontacto" + id;
 
                 Map<String, String> jsonParams = new HashMap<String, String>();
                 jsonParams.put("nome", data.getStringExtra(Utils.PARAM_NOME));
@@ -359,6 +361,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
 
                 int id_contacto = arraycon.get(itemPosition).id;
+                intent.putExtra(Utils.PARAM_INDEX, id_contacto);
                 intent.putExtra(Utils.PARAM_NOME, id_contacto);
                 intent.putExtra(Utils.PARAM_NOME, arraycon.get(itemPosition).nome);
                 intent.putExtra(Utils.PARAM_APELIDO, arraycon.get(itemPosition).apelido);
